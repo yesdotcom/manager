@@ -19,9 +19,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy source code
 COPY . .
 
-# Ensure /logs directory exists and set correct permissions
-RUN mkdir -p /logs && chown appuser:appuser /logs
-
 # Switch to non-root user
 USER appuser
 

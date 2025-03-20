@@ -8,18 +8,22 @@ from cogs.wake import WakeUp
 from cogs.ping import PingUser
 from cogs.purge import PurgeMessages
 
-# Ensure logs directory exists
-log_dir = "/logs"
-os.makedirs(log_dir, exist_ok=True)
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
+
 
 # Configure logging
 logging.basicConfig(
-    handlers=[logging.FileHandler(f"{log_dir}/bot.log", encoding="utf-8")],
+    handlers=[
+        logging.StreamHandler()  # logging.FileHandler(f"logs/bot.log", encoding="utf-8")
+    ],
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
 logging.info("Logging initialized successfully.")
+
 
 # Load bot tokens
 currentDir = os.path.dirname(os.path.abspath(__file__))
@@ -67,7 +71,11 @@ if __name__ == "__main__":
         await bot.close()
 
     try:
-        bot.run(configTokens["discord_token"])
+        discord_token = os.getenv("DISCORD_TOKEN")
+        if not discord_token:
+            logging.error("DISCORD_TOKEN is not set. Please check your .env file.")
+            exit(1)
+        bot.run(discord_token)
     except KeyboardInterrupt:
         logging.info("Ctrl+C detected. Shutting down gracefully...")
         asyncio.run(shutdown())

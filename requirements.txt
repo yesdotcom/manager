@@ -1,2 +1,3 @@
 discord.py
 uvicorn
+python-dotenv

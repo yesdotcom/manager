@@ -13,3 +13,9 @@ services:
       context: .
     ports:
       - 8000:8000
+  bot:
+    build: .
+    env_file:
+      - .env
+    container_name: server-1
+    
